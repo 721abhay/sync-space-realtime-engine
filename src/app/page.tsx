@@ -1,65 +1,103 @@
-import Image from "next/image";
+"use client";
+
+import { AuroraBackground } from "@/components/ui/AuroraBackground";
+import { ContainerScroll } from "@/components/ui/ContainerScroll";
+import { TextGenerateEffect } from "@/components/ui/TextGenerateEffect";
+import { HeroDashboard } from "@/components/landing/HeroDashboard";
+import { motion } from "framer-motion";
+import { ArrowRight, Github, Zap, Shield, Layers } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <AuroraBackground>
+      <div className="relative z-10 w-full overflow-hidden">
+
+        {/* Floating Nav */}
+        <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+          <div className="flex items-center gap-2 p-2 rounded-full border border-white/10 bg-black/20 backdrop-blur-xl shadow-2xl">
+            <div className="h-8 w-8 rounded-full bg-white text-black flex items-center justify-center font-bold">S</div>
+            <div className="flex items-center gap-6 px-4 text-sm font-medium text-white/50">
+              <span className="hover:text-white transition-colors cursor-pointer">Manifesto</span>
+              <span className="hover:text-white transition-colors cursor-pointer">Protocol</span>
+              <span className="hover:text-white transition-colors cursor-pointer">Engine</span>
+            </div>
+            <button className="h-8 px-4 rounded-full bg-white text-black text-xs font-bold hover:bg-gray-200 transition-colors">
+              Join Beta
+            </button>
+          </div>
+        </nav>
+
+        {/* Hero Section */}
+        <ContainerScroll
+          titleComponent={
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <h1 className="text-4xl md:text-8xl font-bold text-white mb-8">
+                  The future of <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500">
+                    Collective Intelligence
+                  </span>
+                </h1>
+              </motion.div>
+
+              <div className="flex justify-center mb-10">
+                <TextGenerateEffect
+                  words="We are not building a document editor. We are building a neural network for your team's thoughts. Zero latency. Zero friction. Infinite scale."
+                  className="text-lg md:text-xl text-neutral-300 max-w-2xl"
+                />
+              </div>
+            </>
+          }
+        >
+          <HeroDashboard />
+        </ContainerScroll>
+
+        {/* Bento Grid (Re-used but with enhanced context) */}
+        <section className="max-w-7xl mx-auto px-4 pb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
+
+            {/* Card 1 */}
+            <div className="col-span-1 lg:col-span-2 row-span-2 p-8 rounded-3xl border border-white/10 bg-neutral-900/50 backdrop-blur-sm hover:border-white/20 transition-all group overflow-hidden relative">
+              <div className="absolute top-0 right-0 p-4 opacity-50">
+                <Zap className="w-24 h-24 text-neutral-800 group-hover:text-white/10 transition-colors rotate-12" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Warp Speed Sync</h3>
+              <p className="text-neutral-400">
+                Utilizing CRDTs and Edge Compute to synchronize state faster than the speed of human perception.
+              </p>
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
+            </div>
+
+            {/* Card 2 */}
+            <div className="col-span-1 p-8 rounded-3xl border border-white/10 bg-neutral-900/50 backdrop-blur-sm hover:border-white/20 transition-all group">
+              <Shield className="w-8 h-8 text-neutral-400 mb-4 group-hover:text-white transition-colors" />
+              <h3 className="text-xl font-bold text-white">Zero Trust</h3>
+              <p className="text-sm text-neutral-500 mt-2">End-to-end encrypted by default.</p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="col-span-1 p-8 rounded-3xl border border-white/10 bg-neutral-900/50 backdrop-blur-sm hover:border-white/20 transition-all group">
+              <Layers className="w-8 h-8 text-neutral-400 mb-4 group-hover:text-white transition-colors" />
+              <h3 className="text-xl font-bold text-white">Neural Search</h3>
+              <p className="text-sm text-neutral-500 mt-2">Find ideas, not just keywords.</p>
+            </div>
+
+            {/* Card 4 - Wide */}
+            <div className="col-span-1 lg:col-span-2 p-8 rounded-3xl border border-white/10 bg-gradient-to-r from-violet-900/20 to-fuchsia-900/20 backdrop-blur-sm border-l-4 border-l-violet-500">
+              <h3 className="text-xl font-bold text-white mb-2">Designed for Flow State</h3>
+              <p className="text-neutral-400">
+                No menus. No distractions. Just you and the signal.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </AuroraBackground>
   );
 }
