@@ -7,11 +7,22 @@ import { toast } from "sonner";
 // In production, we use the env variable. In dev, we fallback to localhost.
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
 
+// Simple debounce utility to avoid spamming the socket
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
 export const useSocket = (documentId: string) => {
     // const [socket, setSocket] = useState<Socket | null>(null); // Removed to fix lint/perf
     const [content, setContent] = useState("");
     const [isConnected, setIsConnected] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [userCount, setUserCount] = useState(1);
+    const debouncedSendRef = useRef<((content: string) => void) | null>(null);
 
     // Ref to prevent "stale closure" issues in event listeners if we needed them
     const socketRef = useRef<Socket | null>(null);
@@ -22,12 +33,16 @@ export const useSocket = (documentId: string) => {
         socketRef.current = s;
         // setSocket(s);
 
+        // Initialize Debouncer
+        debouncedSendRef.current = debounce((c: string) => {
+            if (socketRef.current) {
+                socketRef.current.emit("send-changes", c);
+            }
+        }, 300);
+
         // 2. Setup Event Listeners
         s.on("connect", () => {
             setIsConnected(true);
-            // toast.success("Connected to Real-time Engine");
-
-            // Join the specific document room
             s.emit("join-room", documentId);
         });
 
@@ -38,8 +53,11 @@ export const useSocket = (documentId: string) => {
 
         s.on("document-update", (newContent: string) => {
             setContent(newContent);
-            // Auto-stop generating if we were
             setIsGenerating(false);
+        });
+
+        s.on("user-count", (count: number) => {
+            setUserCount(count);
         });
 
         // 3. Cleanup on Unmount
@@ -48,14 +66,14 @@ export const useSocket = (documentId: string) => {
         };
     }, [documentId]);
 
-    // Function to send changes (Debounce logic could be added here)
+    // Function to send changes
     const sendChange = useCallback((newContent: string) => {
         // Optimistic UI Update (Immediate)
         setContent(newContent);
 
-        // Network Update
-        if (socketRef.current) {
-            socketRef.current.emit("send-changes", newContent);
+        // Network Update (Debounced)
+        if (debouncedSendRef.current) {
+            debouncedSendRef.current(newContent);
         }
     }, []);
 
@@ -74,6 +92,7 @@ export const useSocket = (documentId: string) => {
         sendChange,
         isConnected,
         triggerAI,
-        isGenerating
+        isGenerating,
+        userCount
     };
 };

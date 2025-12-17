@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export default function DashboardPage() {
-    const { content, sendChange, isConnected, triggerAI, isGenerating } = useSocket("demo-doc-1");
+    const { content, sendChange, isConnected, triggerAI, isGenerating, userCount } = useSocket("demo-doc-1");
     const [currentView, setCurrentView] = useState("Home");
     const [showCommandPalette, setShowCommandPalette] = useState(false);
 

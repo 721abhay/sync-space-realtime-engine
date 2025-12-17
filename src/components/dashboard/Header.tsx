@@ -9,12 +9,13 @@ import { useRouter } from "next/navigation";
 
 interface HeaderProps {
     isConnected: boolean;
+    userCount?: number;
     title: string;
     onSearchClick: () => void;
     onNavigate: (view: string) => void;
 }
 
-export const Header = ({ isConnected, title, onSearchClick, onNavigate }: HeaderProps) => {
+export const Header = ({ isConnected, userCount = 1, title, onSearchClick, onNavigate }: HeaderProps) => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const router = useRouter();
@@ -31,7 +32,7 @@ export const Header = ({ isConnected, title, onSearchClick, onNavigate }: Header
             {/* Right: Actions */}
             <div className="flex items-center gap-3">
 
-                <StatusBadge isConnected={isConnected} />
+                <StatusBadge isConnected={isConnected} userCount={userCount} />
 
                 {/* SEARCH BAR */}
                 <div
@@ -144,7 +145,7 @@ export const Header = ({ isConnected, title, onSearchClick, onNavigate }: Header
     );
 };
 
-const StatusBadge = ({ isConnected }: { isConnected: boolean }) => {
+const StatusBadge = ({ isConnected, userCount }: { isConnected: boolean, userCount: number }) => {
     return (
         <div className={cn(
             "flex items-center gap-1.5 px-2 py-1 rounded-full border text-[10px] font-medium transition-all duration-500",
@@ -153,7 +154,7 @@ const StatusBadge = ({ isConnected }: { isConnected: boolean }) => {
                 : "bg-red-500/10 border-red-500/20 text-red-400"
         )}>
             {isConnected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-            <span className="hidden sm:inline">{isConnected ? "Connected" : "Offline"}</span>
+            <span className="hidden sm:inline">{isConnected ? `${userCount} Active` : "Offline"}</span>
         </div>
     )
 }

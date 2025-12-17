@@ -139,6 +139,8 @@ SyncSpace is a real-time collaboration collaboration engine designed for high-pe
 
 io.on("connection", async (socket) => {
     console.log("User Connected:", socket.id);
+    const count = io.engine.clientsCount;
+    io.emit("user-count", count); // Broadcast count
 
     // 1. Fetch State from Redis/File
     const currentContent = await getDocument();
@@ -176,6 +178,10 @@ io.on("connection", async (socket) => {
                 clearInterval(streamInterval);
             }
         }, 30);
+    });
+
+    socket.on("disconnect", () => {
+        io.emit("user-count", io.engine.clientsCount);
     });
 });
 
