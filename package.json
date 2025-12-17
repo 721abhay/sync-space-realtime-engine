@@ -2,6 +2,16 @@
   "name": "sync-space",
   "version": "0.1.0",
   "private": true,
+  "keywords": [
+    "typescript",
+    "nextjs",
+    "socket-io",
+    "redis",
+    "docker",
+    "system-design",
+    "real-time",
+    "full-stack"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
