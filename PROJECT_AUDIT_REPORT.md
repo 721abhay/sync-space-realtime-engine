@@ -44,7 +44,8 @@ The project is split into two distinct services that communicate over HTTP/WebSo
 ### 3.1 Frontend Logic
 -   **`src/hooks/useSocket.ts`**: The "Brain" of the client.
     -   Manages the WebSocket connection lifecycle.
-    -   Handles reconnection logic automatically.
+    -   **Performance**: Implements `debounce` to batch network requests and prevent lag.
+    -   **Presence**: Tracks `userCount` to show active collaborators in real-time.
     -   Exposes simple methods: `sendChange`, `triggerAI`.
 -   **`src/app/(dashboard)/dashboard/page.tsx`**: The "Router".
     -   Manages state for `currentView` (Home vs Inbox vs Settings).
@@ -57,6 +58,9 @@ The project is split into two distinct services that communicate over HTTP/WebSo
     -   *Primary Strategy*: Try to connect to Redis.
     -   *Fallback Strategy*: If Redis fails (e.g., local dev without Docker), write to `database.json`.
     -   *Why?* This ensures the app works "out of the box" for developers but scales for production.
+-   **Real-Time & Presence**:
+    -   Broadcasts `user-count` events on every connection/disconnection.
+    -   Uses "Last-Write-Wins" strategy (Optimized for MVP).
 -   **Security Middleware**:
     -   **Rate Limiting**: Uses a token bucket algorithm to block IPs sending >100 requests/minute.
     -   **Headers**: Sets `HSTS`, `X-Frame-Options`, and `X-Content-Type-Options` to prevent attacks.
