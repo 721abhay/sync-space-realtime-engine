@@ -1,7 +1,7 @@
 "use client";
 
 import { AuroraBackground } from "@/components/ui/AuroraBackground";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -112,7 +112,7 @@ export default function SignupPage() {
                                 ))}
                             </div>
                             <p className="text-xl text-neutral-200 font-medium leading-relaxed">
-                                "SyncSpace is the only tool that actually keeps up with my thought process. The real-time engine is indistinguishable from magic."
+                                &quot;SyncSpace is the only tool that actually keeps up with my thought process. The real-time engine is indistinguishable from magic.&quot;
                             </p>
                             <div className="mt-6 flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-400 to-emerald-400" />

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Search, File, Settings, CreditCard, User, Users, LogOut, Code, Hash, LucideIcon } from "lucide-react";
-import { Command } from "cmdk";
+// import { Command } from "cmdk";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CommandPaletteProps {

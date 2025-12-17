@@ -1,9 +1,9 @@
 "use client";
 
-import { Bell, Search, Wifi, WifiOff, LogOut, User, Settings as SettingsIcon, CreditCard, Check, X, LucideIcon } from "lucide-react";
+import { Bell, Search, Wifi, WifiOff, LogOut, User, Settings as SettingsIcon, CreditCard, LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { useState, useRef, useEffect } from "react";
+// import { toast } from "sonner";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 

@@ -8,7 +8,8 @@ import {
     Inbox,
     MoreHorizontal,
     Settings,
-    User
+    User,
+    LucideIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -27,7 +28,7 @@ export const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
                 className="h-14 flex items-center px-4 border-b border-white/5 hover:bg-white/5 cursor-pointer transition-colors gap-3"
             >
                 <div className="h-6 w-6 rounded bg-gradient-to-tr from-blue-500 to-purple-500 flex-shrink-0 shadow-lg shadow-blue-900/20" />
-                <span className="text-sm font-medium truncate text-neutral-200">Abhay's Team</span>
+                <span className="text-sm font-medium truncate text-neutral-200">Abhay&apos;s Team</span>
                 <ChevronDown className="h-4 w-4 ml-auto text-neutral-500" />
             </div>
 
@@ -66,7 +67,7 @@ export const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
     );
 };
 
-const NavItem = ({ icon: Icon, label, active, badge, onClick }: { icon: any, label: string, active?: boolean, badge?: string, onClick?: () => void }) => {
+const NavItem = ({ icon: Icon, label, active, badge, onClick }: { icon: LucideIcon, label: string, active?: boolean, badge?: string, onClick?: () => void }) => {
     return (
         <div
             onClick={onClick}

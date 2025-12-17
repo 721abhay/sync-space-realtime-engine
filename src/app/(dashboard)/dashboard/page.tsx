@@ -11,7 +11,6 @@ import {
     Inbox,
     AlertCircle,
     Users,
-    Settings,
     Code2,
     Palette,
     Database,
