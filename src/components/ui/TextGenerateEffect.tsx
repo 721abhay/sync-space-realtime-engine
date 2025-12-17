@@ -10,7 +10,7 @@ export const TextGenerateEffect = ({
     className?: string;
 }) => {
     const controls = useAnimation();
-    let wordsArray = words.split(" ");
+    const wordsArray = words.split(" ");
 
     useEffect(() => {
         controls.start((i) => ({

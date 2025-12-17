@@ -8,7 +8,7 @@ import { toast } from "sonner";
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
 
 export const useSocket = (documentId: string) => {
-    const [socket, setSocket] = useState<Socket | null>(null);
+    // const [socket, setSocket] = useState<Socket | null>(null); // Removed to fix lint/perf
     const [content, setContent] = useState("");
     const [isConnected, setIsConnected] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -20,7 +20,7 @@ export const useSocket = (documentId: string) => {
         // 1. Initialize Connection
         const s = io(SOCKET_URL);
         socketRef.current = s;
-        setSocket(s);
+        // setSocket(s);
 
         // 2. Setup Event Listeners
         s.on("connect", () => {
@@ -69,7 +69,7 @@ export const useSocket = (documentId: string) => {
     }, []);
 
     return {
-        socket,
+        // socket,
         content,
         sendChange,
         isConnected,

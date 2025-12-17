@@ -1,17 +1,22 @@
 "use client";
 import React from "react";
-import { motion, useMotionTemplate, useMotionValue, animate } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, animate, HTMLMotionProps } from "framer-motion";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const COLORS = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
+
+interface AuroraBackgroundProps extends HTMLMotionProps<"div"> {
+    children: React.ReactNode;
+    showRadialGradient?: boolean;
+}
 
 export const AuroraBackground = ({
     className,
     children,
     showRadialGradient = true,
     ...props
-}: React.ComponentProps<typeof motion.div> & { showRadialGradient?: boolean }) => {
+}: AuroraBackgroundProps) => {
     const color = useMotionValue(COLORS[0]);
     const backgroundImage = useMotionTemplate`radial-gradient(125% 125% at 50% 0%, #020617 50%, ${color})`;
 
