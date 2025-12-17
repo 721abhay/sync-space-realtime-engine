@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, File, Settings, CreditCard, User, Users, LogOut, Code, Hash } from "lucide-react";
+import { Search, File, Settings, CreditCard, User, Users, LogOut, Code, Hash, LucideIcon } from "lucide-react";
 import { Command } from "cmdk";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -75,7 +75,7 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate }: CommandPalettePr
     );
 };
 
-const CommandItem = ({ icon: Icon, label, shortcut, onClick, danger }: any) => (
+const CommandItem = ({ icon: Icon, label, shortcut, onClick, danger }: { icon: LucideIcon, label: string, shortcut?: string, onClick?: () => void, danger?: boolean }) => (
     <div
         onClick={() => { onClick?.(); }}
         className={`flex items-center gap-2 px-2 py-2 rounded-md text-sm cursor-pointer group transition-colors ${danger ? 'hover:bg-red-500/10 hover:text-red-400 text-red-500' : 'hover:bg-white/10 text-neutral-400 hover:text-white'}`}

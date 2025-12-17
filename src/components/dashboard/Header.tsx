@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Search, Wifi, WifiOff, LogOut, User, Settings as SettingsIcon, CreditCard, Check, X } from "lucide-react";
+import { Bell, Search, Wifi, WifiOff, LogOut, User, Settings as SettingsIcon, CreditCard, Check, X, LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
@@ -158,7 +158,7 @@ const StatusBadge = ({ isConnected }: { isConnected: boolean }) => {
     )
 }
 
-const NotificationItem = ({ initial, color, name, action, target, time, onClick }: any) => (
+const NotificationItem = ({ initial, color, name, action, target, time, onClick }: { initial: string, color?: string, name: string, action: string, target: string, time: string, onClick?: () => void }) => (
     <div onClick={onClick} className="p-3 hover:bg-white/5 transition-colors cursor-pointer flex gap-3 border-b border-white/5 last:border-0">
         <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 ${color || 'bg-neutral-800'}`}>
             {initial}
@@ -173,7 +173,7 @@ const NotificationItem = ({ initial, color, name, action, target, time, onClick 
     </div>
 )
 
-const DropdownItem = ({ icon: Icon, label, danger, onClick }: any) => (
+const DropdownItem = ({ icon: Icon, label, danger, onClick }: { icon: LucideIcon, label: string, danger?: boolean, onClick?: () => void }) => (
     <button
         onClick={onClick}
         className={cn(

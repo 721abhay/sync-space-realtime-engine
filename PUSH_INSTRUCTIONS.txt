@@ -1,0 +1,6 @@
+# 1. Create a repo on GitHub.com called 'sync-space'
+# 2. Run this command in your terminal (Replace USERNAME):
+
+git remote add origin https://github.com/YOUR_USERNAME/sync-space.git
+git branch -M main
+git push -u origin main

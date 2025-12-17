@@ -65,7 +65,7 @@ const redisClient = createClient({
     url: process.env.REDIS_URL || 'redis://localhost:6379'
 });
 
-redisClient.on('error', (err) => {
+redisClient.on('error', () => {
     // console.log('Redis/Docker not running, falling back to File System');
     useRedis = false;
 });
@@ -77,7 +77,7 @@ redisClient.on('connect', () => {
 (async () => {
     try {
         await redisClient.connect();
-    } catch (e) {
+    } catch {
         console.log("⚠️ Redis connection failed. Using database.json fallback.");
         useRedis = false;
     }
@@ -103,7 +103,6 @@ async function saveDocument(content: string) {
 }
 
 async function getDocument() {
-    let content = "";
     if (useRedis) {
         try {
             const data = await redisClient.get(DOCUMENT_KEY);
@@ -116,7 +115,7 @@ async function getDocument() {
         if (fs.existsSync(DB_PATH)) {
             try {
                 return JSON.parse(fs.readFileSync(DB_PATH, "utf-8")).content;
-            } catch (e) { }
+            } catch { }
         }
     }
 
@@ -158,7 +157,7 @@ io.on("connection", async (socket) => {
     });
 
     // AI Simulation
-    socket.on("trigger-ai", (prompt) => {
+    socket.on("trigger-ai", () => {
         const aiResponse = `\n\n## AI Analysis\nRedis is effectively handling the state management, reducing database load by 95%.\nRecommended Action: Scale Redis Cluster for global sharding.`;
 
         let currentIndex = 0;

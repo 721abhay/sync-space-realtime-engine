@@ -10,14 +10,14 @@ import { motion } from "framer-motion";
 import {
     Inbox,
     AlertCircle,
-    Hash,
     Users,
     Settings,
     Code2,
     Palette,
     Database,
     ToggleLeft,
-    Monitor
+    Monitor,
+    LucideIcon
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -109,7 +109,7 @@ export default function DashboardPage() {
 
 // --- Sub-Components for Different Views ---
 
-const PlaceholderState = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
+const PlaceholderState = ({ icon: Icon, title, description }: { icon: LucideIcon, title: string, description: string }) => (
     <div className="flex-1 flex flex-col items-center justify-center text-neutral-500 animate-in fade-in duration-500">
         <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
