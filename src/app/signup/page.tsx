@@ -1,85 +1,131 @@
 "use client";
 
+import { AuroraBackground } from "@/components/ui/AuroraBackground";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { BackgroundGrid } from "@/components/ui/BackgroundGrid";
-import { ArrowLeft, Github, Stars } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 export default function SignupPage() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSignup = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        // Simulate API Call
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        toast.success("Account Created", {
+            description: "Welcome to SyncSpace. Your workspace is ready."
+        });
+
+        router.push("/dashboard");
+        setIsLoading(false);
+    };
+
     return (
-        <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-black text-white">
-            <BackgroundGrid />
+        <AuroraBackground showRadialGradient={false}>
+            <div className="relative z-10 w-full min-h-screen flex">
 
-            {/* Back Button */}
-            <Link
-                href="/"
-                className="absolute top-8 left-8 flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
-            >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
-            </Link>
+                {/* Left Side: Form */}
+                <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 lg:px-24 relative bg-black/80 backdrop-blur-md">
+                    <Link href="/" className="absolute top-8 left-8 text-neutral-400 hover:text-white flex items-center gap-2 transition-colors">
+                        <ArrowLeft className="w-4 h-4" /> Back to Home
+                    </Link>
 
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-xl overflow-hidden relative z-10 shadow-2xl"
-            >
-                {/* Left Side - Form */}
-                <div className="p-8 md:p-12 relative z-10">
-                    <div className="mb-8">
-                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center mb-4">
-                            <Stars className="h-5 w-5 text-white" />
-                        </div>
-                        <h1 className="text-3xl font-bold mb-2">Create an account</h1>
-                        <p className="text-gray-400 text-sm">Join thousands of developers shipping faster.</p>
-                    </div>
+                    <div className="max-w-md w-full mx-auto">
+                        <h1 className="text-4xl font-bold text-white mb-2">Create your account</h1>
+                        <p className="text-neutral-400 mb-8">Join the thousands of teams shipping faster.</p>
 
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-xs font-medium text-gray-400 ml-1">First name</label>
-                                <input className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono text-sm" />
+                        <form onSubmit={handleSignup} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-medium text-neutral-400 mb-1 ml-1">First Name</label>
+                                    <input
+                                        type="text"
+                                        className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-neutral-400 mb-1 ml-1">Last Name</label>
+                                    <input
+                                        type="text"
+                                        className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all"
+                                        required
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-medium text-gray-400 ml-1">Last name</label>
-                                <input className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono text-sm" />
+                            <div>
+                                <label className="block text-xs font-medium text-neutral-400 mb-1 ml-1">Work Email</label>
+                                <input
+                                    type="email"
+                                    className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all"
+                                    required
+                                />
                             </div>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-medium text-gray-400 ml-1">Email</label>
-                            <input type="email" className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono text-sm" />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-medium text-gray-400 ml-1">Password</label>
-                            <input type="password" className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono text-sm" />
-                        </div>
-
-                        <button className="w-full h-12 rounded-lg bg-white text-black font-bold text-sm hover:bg-gray-200 transition-colors mt-4">
-                            Create Account
-                        </button>
-                    </div>
-                </div>
-
-                {/* Right Side - Decor */}
-                <div className="hidden md:block relative bg-white/5 overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30"></div>
-
-                    <div className="relative h-full flex flex-col justify-end p-12">
-                        <blockquote className="text-lg font-medium leading-relaxed mb-4">
-                            "SyncSpace transformed how our engineering team collaborates. It's the speed of Notepad with the power of Jira."
-                        </blockquote>
-                        <div className="flex items-center gap-3">
-                            <div className="h-8 w-8 rounded-full bg-white/20"></div>
-                            <div className="text-xs">
-                                <div className="font-bold">Sarah Chen</div>
-                                <div className="text-white/60">CTO at TechFlow</div>
+                            <div>
+                                <label className="block text-xs font-medium text-neutral-400 mb-1 ml-1">Password</label>
+                                <input
+                                    type="password"
+                                    className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all"
+                                    required
+                                />
                             </div>
-                        </div>
+
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="w-full h-12 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold hover:opacity-90 transition-all hover:scale-[1.02] active:scale-95 mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            >
+                                {isLoading ? (
+                                    <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                ) : "Get Started"}
+                            </button>
+                        </form>
+
+                        <p className="mt-6 text-xs text-neutral-500">
+                            By signing up, you agree to our Terms of Service and Privacy Policy.
+                        </p>
                     </div>
                 </div>
 
-            </motion.div>
-        </div>
+                {/* Right Side: Hero Image / Testimonial */}
+                <div className="hidden lg:flex w-1/2 bg-neutral-900 relative overflow-hidden items-center justify-center p-12">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 to-black z-0" />
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 contrast-150 brightness-100 mix-blend-overlay"></div>
+
+                    <div className="relative z-10 max-w-lg">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-black/40 backdrop-blur-xl p-8 rounded-3xl border border-white/10"
+                        >
+                            <div className="flex gap-1 mb-4">
+                                {[1, 2, 3, 4, 5].map(i => (
+                                    <svg key={i} className="w-5 h-5 text-yellow-500 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                                ))}
+                            </div>
+                            <p className="text-xl text-neutral-200 font-medium leading-relaxed">
+                                "SyncSpace is the only tool that actually keeps up with my thought process. The real-time engine is indistinguishable from magic."
+                            </p>
+                            <div className="mt-6 flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-400 to-emerald-400" />
+                                <div>
+                                    <div className="text-white font-bold">Alex Chen</div>
+                                    <div className="text-sm text-neutral-400">Staff Engineer @ Vercel</div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+
+            </div>
+        </AuroraBackground>
     );
 }

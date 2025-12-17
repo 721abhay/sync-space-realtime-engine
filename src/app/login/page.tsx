@@ -1,80 +1,111 @@
 "use client";
 
+import { AuroraBackground } from "@/components/ui/AuroraBackground";
+import { ArrowLeft, Github, Chrome } from "lucide-react"; // Chrome icon used for Google generic
 import Link from "next/link";
-import { BackgroundGrid } from "@/components/ui/BackgroundGrid";
-import { ArrowLeft, Github, Mail } from "lucide-react";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        // Simulate Server Latency
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        // Success Mock
+        toast.success("Welcome back, Abhay", {
+            description: "Session restored securely."
+        });
+
+        // Redirect
+        router.push("/dashboard");
+        setIsLoading(false);
+    };
+
+    const handleSocialLogin = (provider: string) => {
+        toast.info(`Connecting to ${provider}...`, {
+            description: "Redirecting to OAuth provider."
+        });
+        setTimeout(() => router.push("/dashboard"), 1000);
+    }
+
     return (
-        <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-black text-white">
-            <BackgroundGrid />
+        <AuroraBackground showRadialGradient={false}>
+            <div className="relative z-10 w-full min-h-screen flex items-center justify-center px-4">
 
-            {/* Back Button */}
-            <Link
-                href="/"
-                className="absolute top-8 left-8 flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
-            >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
-            </Link>
+                <Link href="/" className="absolute top-8 left-8 text-neutral-400 hover:text-white flex items-center gap-2 transition-colors">
+                    <ArrowLeft className="w-4 h-4" /> Back
+                </Link>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-md p-8 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-xl relative z-10"
-            >
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
-                    <p className="text-gray-400 text-sm">Sign in to continue to your workspace.</p>
+                <div className="w-full max-w-md p-8 rounded-3xl border border-white/10 bg-black/50 backdrop-blur-xl shadow-2xl">
+                    <div className="text-center mb-8">
+                        <div className="h-12 w-12 bg-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-black text-xl">S</div>
+                        <h1 className="text-2xl font-bold text-white">Welcome back</h1>
+                        <p className="text-neutral-400 text-sm mt-2">Enter your credentials to access the neural network.</p>
+                    </div>
+
+                    <div className="flex gap-4 mb-6">
+                        <button
+                            onClick={() => handleSocialLogin("GitHub")}
+                            className="flex-1 h-12 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-all hover:scale-[1.02]">
+                            <Github className="w-5 h-5 text-white" />
+                        </button>
+                        <button
+                            onClick={() => handleSocialLogin("Google")}
+                            className="flex-1 h-12 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-all hover:scale-[1.02]">
+                            <Chrome className="w-5 h-5 text-white" />
+                        </button>
+                    </div>
+
+                    <div className="relative mb-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-white/10"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-black px-2 text-neutral-500">Or continue with email</span>
+                        </div>
+                    </div>
+
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <div>
+                            <input
+                                type="email"
+                                placeholder="name@company.com"
+                                className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all"
+                                required
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full h-12 rounded-xl bg-white text-black font-bold hover:bg-neutral-200 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                            {isLoading ? (
+                                <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                            ) : "Sign In"}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center text-sm text-neutral-500">
+                        Don't have an account? <Link href="/signup" className="text-white hover:underline">Sign up</Link>
+                    </div>
                 </div>
-
-                <div className="space-y-4">
-                    <button className="w-full h-12 rounded-lg bg-white text-black font-medium flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
-                        <Github className="h-5 w-5" />
-                        Continue with GitHub
-                    </button>
-                    <button className="w-full h-12 rounded-lg border border-white/10 bg-transparent text-white font-medium flex items-center justify-center gap-2 hover:bg-white/5 transition-colors">
-                        <div className="h-5 w-5 flex items-center justify-center font-bold text-lg">G</div>
-                        Continue with Google
-                    </button>
-                </div>
-
-                <div className="relative my-8">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10"></div>
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-black px-2 text-gray-500">Or continue with email</span>
-                    </div>
-                </div>
-
-                <form className="space-y-4">
-                    <div className="space-y-2">
-                        <label className="text-xs font-medium text-gray-400 ml-1">Email</label>
-                        <input
-                            type="email"
-                            placeholder="name@company.com"
-                            className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono text-sm"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-xs font-medium text-gray-400 ml-1">Password</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono text-sm"
-                        />
-                    </div>
-                    <button className="w-full h-12 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold text-sm hover:opacity-90 transition-opacity">
-                        Sign In
-                    </button>
-                </form>
-
-                <p className="mt-8 text-center text-xs text-gray-500">
-                    Don't have an account? <Link href="/signup" className="text-white hover:underline">Sign up</Link>
-                </p>
-            </motion.div>
-        </div>
+            </div>
+        </AuroraBackground>
     );
 }

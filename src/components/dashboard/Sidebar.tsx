@@ -12,20 +12,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { useState } from "react";
 
-export const Sidebar = () => {
-    const [activeTab, setActiveTab] = useState("Home");
+interface SidebarProps {
+    activeTab: string;
+    onTabChange: (tab: string) => void;
+}
 
-    const handleNavClick = (label: string) => {
-        setActiveTab(label);
-        if (label !== "Home") {
-            toast.info(`Navigating to ${label}...`, {
-                description: "This feature is coming in the V2 Beta."
-            });
-        }
-    };
-
+export const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
     return (
         <aside className="w-[260px] h-full border-r border-white/10 bg-neutral-900/50 flex flex-col hidden md:flex backdrop-blur-md">
             {/* User Switcher */}
@@ -42,31 +35,31 @@ export const Sidebar = () => {
 
                 {/* Main Navigation */}
                 <div className="space-y-1">
-                    <NavItem icon={Home} label="Home" active={activeTab === "Home"} onClick={() => handleNavClick("Home")} />
-                    <NavItem icon={Inbox} label="Inbox" badge="4" active={activeTab === "Inbox"} onClick={() => handleNavClick("Inbox")} />
-                    <NavItem icon={Clock} label="My Issues" active={activeTab === "My Issues"} onClick={() => handleNavClick("My Issues")} />
+                    <NavItem icon={Home} label="Home" active={activeTab === "Home"} onClick={() => onTabChange("Home")} />
+                    <NavItem icon={Inbox} label="Inbox" badge="4" active={activeTab === "Inbox"} onClick={() => onTabChange("Inbox")} />
+                    <NavItem icon={Clock} label="My Issues" active={activeTab === "My Issues"} onClick={() => onTabChange("My Issues")} />
                 </div>
 
                 {/* Teams / Projects */}
                 <div className="space-y-1">
                     <div className="text-[10px] font-bold text-neutral-500 uppercase px-2 mb-2 tracking-wider">Favorites</div>
-                    <NavItem icon={Hash} label="Frontend Core" active={activeTab === "Frontend Core"} onClick={() => handleNavClick("Frontend Core")} />
-                    <NavItem icon={Hash} label="Design System" active={activeTab === "Design System"} onClick={() => handleNavClick("Design System")} />
-                    <NavItem icon={Hash} label="API V2" active={activeTab === "API V2"} onClick={() => handleNavClick("API V2")} />
+                    <NavItem icon={Hash} label="Frontend Core" active={activeTab === "Frontend Core"} onClick={() => onTabChange("Frontend Core")} />
+                    <NavItem icon={Hash} label="Design System" active={activeTab === "Design System"} onClick={() => onTabChange("Design System")} />
+                    <NavItem icon={Hash} label="API V2" active={activeTab === "API V2"} onClick={() => onTabChange("API V2")} />
                 </div>
 
                 <div className="space-y-1">
                     <div className="text-[10px] font-bold text-neutral-500 uppercase px-2 mb-2 tracking-wider">Your Teams</div>
-                    <TeamItem initial="E" label="Engineering" color="purple" />
-                    <TeamItem initial="D" label="Design" color="green" />
-                    <TeamItem initial="M" label="Marketing" color="orange" />
+                    <TeamItem initial="E" label="Engineering" color="purple" onClick={() => onTabChange("Engineering")} />
+                    <TeamItem initial="D" label="Design" color="green" onClick={() => onTabChange("Design")} />
+                    <TeamItem initial="M" label="Marketing" color="orange" onClick={() => onTabChange("Marketing")} />
                 </div>
             </div>
 
             {/* Bottom Actions */}
             <div className="p-3 border-t border-white/5 space-y-1">
-                <NavItem icon={Settings} label="Settings" onClick={() => toast("Settings Panel", { description: "Global configuration loaded." })} />
-                <NavItem icon={User} label="Invite Members" onClick={() => toast.success("Invite Link Copied", { description: "Share this link with your team." })} />
+                <NavItem icon={Settings} label="Settings" active={activeTab === "Settings"} onClick={() => onTabChange("Settings")} />
+                <NavItem icon={User} label="Invite Members" active={activeTab === "Invite Members"} onClick={() => onTabChange("Invite Members")} />
             </div>
 
         </aside>
@@ -92,7 +85,7 @@ const NavItem = ({ icon: Icon, label, active, badge, onClick }: { icon: any, lab
     )
 }
 
-const TeamItem = ({ initial, label, color }: { initial: string, label: string, color: string }) => {
+const TeamItem = ({ initial, label, color, onClick }: { initial: string, label: string, color: string, onClick?: () => void }) => {
     const colorMap: Record<string, string> = {
         purple: "bg-purple-500/20 text-purple-400",
         green: "bg-green-500/20 text-green-400",
@@ -101,7 +94,7 @@ const TeamItem = ({ initial, label, color }: { initial: string, label: string, c
 
     return (
         <div
-            onClick={() => toast.success(`Switched context to ${label}`)}
+            onClick={onClick}
             className="flex items-center gap-2 px-2 py-1.5 text-sm text-neutral-400 hover:text-white hover:bg-white/5 rounded-md cursor-pointer group transition-all active:scale-95 select-none">
             <span className={cn("w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold", colorMap[color])}>
                 {initial}

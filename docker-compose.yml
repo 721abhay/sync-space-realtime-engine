@@ -1,40 +1,66 @@
 version: '3.8'
 
 services:
+  # 1. THE DATABASE (PostgreSQL) - "The Vault"
+  postgres:
+    image: postgres:15-alpine
+    container_name: syncspace_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: syncspace_core
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. THE CACHE (Redis) - "The Speed Layer"
+  redis:
+    image: redis:7-alpine
+    container_name: syncspace_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # 3. THE BACKEND API - "The Brain"
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: syncspace_server
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://admin:password123@postgres:5432/syncspace_core
+      - PORT=3001
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  # 4. THE FRONTEND - "The Face"
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: syncspace-web
-    restart: always
+    container_name: syncspace_web
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+    depends_on:
+      - server
     volumes:
       - .:/app
       - /app/node_modules
-    networks:
-      - syncspace-network
-
-  # We will need this later for the Real-time Database
-  # db:
-  #   image: postgres:15-alpine
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: syncspace
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   networks:
-  #     - syncspace-network
-
-networks:
-  syncspace-network:
-    driver: bridge
 
 volumes:
-  pgdata:
+  postgres_data:
+  redis_data:
