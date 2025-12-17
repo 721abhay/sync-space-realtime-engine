@@ -27,7 +27,7 @@ export const AuroraBackground = ({
             repeat: Infinity,
             repeatType: "mirror",
         });
-    }, []);
+    }, [color]);
 
     return (
         <motion.div
