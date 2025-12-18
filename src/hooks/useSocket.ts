@@ -8,6 +8,7 @@ import { toast } from "sonner";
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
 
 // Simple debounce utility to avoid spamming the socket
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
     let timeout: NodeJS.Timeout;
     return (...args: Parameters<T>) => {
