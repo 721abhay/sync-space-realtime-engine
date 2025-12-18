@@ -1,5 +1,8 @@
-import { Zap } from "lucide-react";
+import { Zap, Eye, PenTool } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { useState } from "react";
 
 interface EditorProps {
     content: string;
@@ -9,6 +12,8 @@ interface EditorProps {
 }
 
 export const Editor = ({ content, onContentChange, onTriggerAI, isGenerating }: EditorProps) => {
+    const [mode, setMode] = useState<"write" | "preview">("write");
+
     return (
         <div className="flex-1 overflow-y-auto p-4 md:p-16 max-w-4xl mx-auto w-full">
             <div className="group relative min-h-[500px] outline-none">
@@ -17,15 +22,47 @@ export const Editor = ({ content, onContentChange, onTriggerAI, isGenerating }: 
                     Project SyncSpace: Product Specs
                 </h1>
 
+                {/* Toolbar */}
+                <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
+                    <button
+                        onClick={() => setMode("write")}
+                        className={cn(
+                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
+                            mode === "write" ? "bg-white/10 text-white" : "text-neutral-500 hover:text-white hover:bg-white/5"
+                        )}
+                    >
+                        <PenTool className="h-3.5 w-3.5" />
+                        Write
+                    </button>
+                    <button
+                        onClick={() => setMode("preview")}
+                        className={cn(
+                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
+                            mode === "preview" ? "bg-white/10 text-white" : "text-neutral-500 hover:text-white hover:bg-white/5"
+                        )}
+                    >
+                        <Eye className="h-3.5 w-3.5" />
+                        Preview
+                    </button>
+                </div>
+
                 {/* Real-time Content Area */}
-                <div className="relative">
-                    <textarea
-                        value={content}
-                        onChange={(e) => onContentChange(e.target.value)}
-                        placeholder="Start typing to sync with the team..."
-                        className="w-full h-[60vh] bg-transparent text-neutral-300 text-lg leading-relaxed outline-none resize-none placeholder:text-neutral-700 font-mono tracking-wide selection:bg-blue-500/30"
-                        spellCheck={false}
-                    />
+                <div className="relative min-h-[60vh]">
+                    {mode === "write" ? (
+                        <textarea
+                            value={content}
+                            onChange={(e) => onContentChange(e.target.value)}
+                            placeholder="Start typing to sync with the team..."
+                            className="w-full h-full min-h-[60vh] bg-transparent text-neutral-300 text-lg leading-relaxed outline-none resize-none placeholder:text-neutral-700 font-mono tracking-wide selection:bg-blue-500/30"
+                            spellCheck={false}
+                        />
+                    ) : (
+                        <div className="prose prose-invert prose-lg max-w-none min-h-[60vh] text-neutral-300">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {content || "*No content yet*"}
+                            </ReactMarkdown>
+                        </div>
+                    )}
 
                     {/* AI Context Menu */}
                     <div className="absolute bottom-4 right-4 flex gap-2">
@@ -52,6 +89,7 @@ export const Editor = ({ content, onContentChange, onTriggerAI, isGenerating }: 
                 <div className="mt-8 flex items-center justify-between text-xs font-mono text-neutral-600 border-t border-white/5 pt-4">
                     <div className="flex gap-4">
                         <span>Ln {content.split('\n').length}, Col {content.length}</span>
+                        <span>{mode === "write" ? "Writing Mode" : "Reading Mode"}</span>
                         <span>UTF-8</span>
                     </div>
                     <div className="flex items-center gap-2">
