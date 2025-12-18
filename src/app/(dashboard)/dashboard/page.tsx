@@ -4,20 +4,30 @@ import React, { useState } from "react";
 import { useSocket } from "@/hooks/useSocket";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { Header } from "@/components/dashboard/Header";
-import { Editor } from "@/components/dashboard/Editor";
 import { CommandPalette } from "@/components/dashboard/CommandPalette";
 import { motion } from "framer-motion";
 import {
+    LayoutDashboard,
+    Search,
+    Database,
+    Palette,
+    Code2,
+    Users,
+    Zap,
+    History,
     Inbox,
     AlertCircle,
-    Users,
-    Code2,
-    Palette,
-    Database,
     ToggleLeft,
     Monitor,
     LucideIcon
 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Dynamically import Editor to avoid ESM/SSR build issues with remark-gfm
+const Editor = dynamic(() => import("@/components/dashboard/Editor").then(mod => mod.Editor), {
+    ssr: false,
+    loading: () => <div className="flex-1 flex items-center justify-center text-neutral-500 animate-pulse">Initializing Editor Engine...</div>
+});
 
 export default function DashboardPage() {
     const [currentDocId, setCurrentDocId] = useState("demo-doc-1");
