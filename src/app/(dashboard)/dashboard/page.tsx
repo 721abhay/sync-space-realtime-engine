@@ -7,14 +7,10 @@ import { Header } from "@/components/dashboard/Header";
 import { CommandPalette } from "@/components/dashboard/CommandPalette";
 import { motion } from "framer-motion";
 import {
-    LayoutDashboard,
-    Search,
     Database,
     Palette,
     Code2,
     Users,
-    Zap,
-    History,
     Inbox,
     AlertCircle,
     ToggleLeft,
