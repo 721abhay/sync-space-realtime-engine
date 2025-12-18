@@ -20,9 +20,15 @@ import {
 } from "lucide-react";
 
 export default function DashboardPage() {
-    const { content, sendChange, isConnected, triggerAI, isGenerating, userCount } = useSocket("demo-doc-1");
+    const [currentDocId, setCurrentDocId] = useState("demo-doc-1");
+    const { content, sendChange, isConnected, triggerAI, isGenerating, userCount } = useSocket(currentDocId);
     const [currentView, setCurrentView] = useState("Home");
     const [showCommandPalette, setShowCommandPalette] = useState(false);
+
+    const handleProjectSelect = (projectId: string) => {
+        setCurrentDocId(projectId.toLowerCase().replace(/\s+/g, '-'));
+        setCurrentView("Home");
+    };
 
     return (
         <div className="flex h-screen w-full bg-black text-white selection:bg-purple-500/30">
@@ -37,7 +43,8 @@ export default function DashboardPage() {
             <main className="flex-1 flex flex-col min-w-0 bg-neutral-950 relative">
                 <Header
                     isConnected={isConnected}
-                    title={currentView}
+                    userCount={userCount}
+                    title={currentView === "Home" ? `Editor / ${currentDocId}` : currentView}
                     onSearchClick={() => setShowCommandPalette(true)}
                     onNavigate={setCurrentView}
                 />
@@ -72,7 +79,7 @@ export default function DashboardPage() {
 
                 {/* --- 4. PROJECTS (Frontend Core, API V2, Design System) --- */}
                 {["Frontend Core", "API V2", "Design System"].includes(currentView) && (
-                    <ProjectView title={currentView} />
+                    <ProjectView title={currentView} onSelect={handleProjectSelect} />
                 )}
 
                 {/* --- 5. TEAMS (Engineering, Design, Marketing) --- */}
@@ -122,7 +129,7 @@ const PlaceholderState = ({ icon: Icon, title, description }: { icon: LucideIcon
     </div>
 );
 
-const ProjectView = ({ title }: { title: string }) => {
+const ProjectView = ({ title, onSelect }: { title: string, onSelect: (id: string) => void }) => {
     return (
         <div className="flex-1 p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="max-w-4xl mx-auto space-y-6">
@@ -141,7 +148,7 @@ const ProjectView = ({ title }: { title: string }) => {
                 <div className="space-y-4">
                     <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wider">Active Sprints</h3>
                     {[1, 2, 3].map((i) => (
-                        <div key={i} className="bg-neutral-900/50 border border-white/5 p-4 rounded-xl flex items-center justify-between hover:border-white/10 transition-colors cursor-pointer group">
+                        <div key={i} onClick={() => onSelect(`${title}-task-${i}`)} className="bg-neutral-900/50 border border-white/5 p-4 rounded-xl flex items-center justify-between hover:border-white/10 transition-colors cursor-pointer group hover:bg-white/5">
                             <div className="flex items-center gap-3">
                                 <div className="h-2 w-2 rounded-full bg-emerald-500" />
                                 <span className="text-neutral-300 font-medium">Refactor Component_{i} for better performance</span>
